@@ -1,9 +1,8 @@
+
+
 import mongoose from 'mongoose';
-import validator from "validator"
+import validator from 'validator';
 import bcrypt from 'bcrypt';
-
-
-
 
 const userSchema = new mongoose.Schema({
   nom: {
@@ -21,42 +20,40 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type:String,
-    required: true,
-    unique: true
+    required: true
   }  
 });
 
 userSchema.statics.signup = async function (email, password, nom, prenom) {
+  console.log("here");
   if (!email || !password || !nom || !prenom){
-    throw Error('all fields are required !')
-}
+    throw new Error('all fields are required !');
+  }
 
+  if (!validator.isEmail(email)) {
+    console.log("mail");
+    throw new Error("invalid email");
+  }
 
+  if (!validator.isStrongPassword(password)) {
+    console.log("password");
+    throw new Error('you should send a strong password !');
+  }
 
-if (!validator.isEmail(email)) {
-  throw Error('invalid email')
-}
+  const exists = await this.findOne({ email });
+  if (exists){
+    console.log("exists");
+    throw new Error('Email already exists');
+  }
 
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+console.log(hashedPassword);
+  const newUser = await this.create({ email, password: hashedPassword, nom, prenom });
 
+  console.log({newUser});
 
-if (!validator.isStrongPassword(password)) {
-    throw Error('you should send a strong password !')
-}
+  return newUser;
+};
 
-
-const exists = await this.findOne({email})
-if (exists){
-    throw Error('Email existe')
-}
-
-const salt =await bcrypt.genSalt(10)
-const hashedPassword = await bcrypt.hash(password , salt)
-
-const newUser = await this.create({email, password:hashedPassword, nom, prenom})
-console.log(newUser);
-
-
-return newUser
-}
-
-export const User = mongoose.model('User', userSchema); 
+export const User = mongoose.model('User', userSchema);

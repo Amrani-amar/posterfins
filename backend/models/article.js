@@ -14,6 +14,10 @@ const articleSchema = new Schema({
     default:"rien",
     required: true
   },
+  image: {
+    type: String,
+    required: true
+  },
 
   user:{
     type: Schema.Types.ObjectId,

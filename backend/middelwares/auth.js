@@ -8,14 +8,12 @@ export const createToken = (userId) => {
 }
 
 export const userAuthValidation = (req, res, next) => {
-  console.log(req);
   const authToken = req.cookies["authToken"].authToken
-  console.log(authToken);
-
+  
   if (!authToken) {
-    throw Error("no auth for this action")
+    throw Error("no auth domage!");
   }
-
+ 
   const decodedToken = verify(authToken, process.env.SECRET_KEY)
 
   if (!decodedToken) {
@@ -25,3 +23,5 @@ export const userAuthValidation = (req, res, next) => {
   res.locals.userId = decodedToken.userId
   next()
 }
+   
+
