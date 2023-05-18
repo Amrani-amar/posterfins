@@ -13,6 +13,7 @@ import {
 } from '@tanstack/react-query'
 import ConnexionForm from './composant/connexion';
 import Articles from './composant/articles';
+import AjouterArticles from './composant/ajouterArticle';
 
 const queryClient = new QueryClient() 
 function App() {
@@ -25,6 +26,7 @@ function App() {
           <Route path="/S'enregistrer" element={<RegisterForm />} />
           <Route path="/CONNEXION" element={<ConnexionForm />} />
           <Route path="/Articles" element={<Articles />} />
+          <Route path="/ajouterArticles" element={<AjouterArticles />} />
         </Routes>
       </Router>
       {/* <RegisterForm /> */}
